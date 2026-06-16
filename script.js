@@ -1,19 +1,25 @@
-const menuButton = document.querySelector(".menu-button");
-const mobileNav = document.querySelector(".mobile-nav");
+const header = document.querySelector(".site-header");
+const menuToggle = document.querySelector(".menu-toggle");
+const filterButtons = document.querySelectorAll(".filter-button");
+const portfolioCards = document.querySelectorAll(".portfolio-card");
 
-menuButton?.addEventListener("click", () => {
-  const isOpen = menuButton.getAttribute("aria-expanded") === "true";
-  menuButton.setAttribute("aria-expanded", String(!isOpen));
-  mobileNav.classList.toggle("open", !isOpen);
-  document.body.classList.toggle("menu-open", !isOpen);
-});
+if (menuToggle && header) {
+  menuToggle.addEventListener("click", () => {
+    const isOpen = header.classList.toggle("is-open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+}
 
-mobileNav?.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    mobileNav.classList.remove("open");
-    menuButton.setAttribute("aria-expanded", "false");
-    document.body.classList.remove("menu-open");
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const filter = button.dataset.filter;
+
+    filterButtons.forEach((item) => item.classList.remove("is-active"));
+    button.classList.add("is-active");
+
+    portfolioCards.forEach((card) => {
+      const showCard = filter === "all" || card.dataset.category === filter;
+      card.classList.toggle("is-hidden", !showCard);
+    });
   });
 });
-
-document.querySelector("#year").textContent = String(new Date().getFullYear());
